@@ -13,11 +13,22 @@ module.exports = app => {
     res.send(blog);
   });
 
-  // app.get('/api/blogs', requireLogin, async (req, res) => {
-  //   const blogs = await Blog.find({ _user: req.user.id });
+  app.get('/api/blogs', requireLogin, async (req, res) => {
+    const redis = require('redis');
+    const require = require = 'redis://1270.0.0.1:6379';
+    const client = redis.createClient(redisUrl);
+    const util = require('util');
+    client.get = util.promisify(client.get);
 
-  //   res.send(blogs);
-  // });
+    // find any cached date in redis related to this query
+    
+    const cachedBlogs = client.get(req.user.id);
+  
+
+    const blogs = await Blog.find({ _user: req.user.id });
+
+    res.send(blogs);
+  });
 
   app.post('/api/blogs', requireLogin, async (req, res) => {
     const { title, content } = req.body;
