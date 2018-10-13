@@ -13,11 +13,11 @@ module.exports = app => {
     res.send(blog);
   });
 
-  app.get('/api/blogs', requireLogin, async (req, res) => {
-    const blogs = await Blog.find({ _user: req.user.id });
+  // app.get('/api/blogs', requireLogin, async (req, res) => {
+  //   const blogs = await Blog.find({ _user: req.user.id });
 
-    res.send(blogs);
-  });
+  //   res.send(blogs);
+  // });
 
   app.post('/api/blogs', requireLogin, async (req, res) => {
     const { title, content } = req.body;

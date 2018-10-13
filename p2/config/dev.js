@@ -5,4 +5,3 @@ module.exports = {
   mongoURI: 'mongodb://admin:123qweasd@ds131373.mlab.com:31373/blogdev',
   cookieKey: '123123123'
 };
-
