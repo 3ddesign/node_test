@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const sessionFactory = require('./factories/sessionFactory');
 
 let browser, page;
 
@@ -21,10 +22,22 @@ test('the header has the correct text', async () => {
 });
 
 test('clickin login starts oauth flow', async () => {
-  await page.click('.right a'); 
-
+  await page.click('.right a');
   const url = await page.url();
-
   expect(url).toMatch(/accounts\.google\.com/);
-
 });
+
+test('When signed in, shows logout button', async () => {
+  // const id = '5bc0f26e4d38f2164ec02ac1';
+  const { session, sig } = sessionFactory();
+
+  await page.setCookie({ name: 'session', value: session});
+  await page.setCookie({ name: 'session.sig', value: sig});
+  await page.goto('localhost:3000');
+  await page.waitFor('a[href="/auth/logout"]');
+
+  const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
+
+  expect(text).toEqual('Logout');
+});
+
