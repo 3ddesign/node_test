@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const sessionFactory = require('./factories/sessionFactory');
-
+const userFactory = require('./factories/userFactory');
 let browser, page;
 
 beforeEach(async () => {
@@ -17,6 +17,7 @@ afterEach(async () => {
 });
 
 test('the header has the correct text', async () => {
+  jest.setTimeout(30000);
   const text = await page.$eval('a.brand-logo', el => el.innerHTML);
   expect(text).toEqual('Blogster');
 });
@@ -29,15 +30,14 @@ test('clickin login starts oauth flow', async () => {
 
 test('When signed in, shows logout button', async () => {
   // const id = '5bc0f26e4d38f2164ec02ac1';
-  const { session, sig } = sessionFactory();
+  const user = await userFactory();
+  const { session, sig } = sessionFactory(user);
 
   await page.setCookie({ name: 'session', value: session});
   await page.setCookie({ name: 'session.sig', value: sig});
   await page.goto('localhost:3000');
   await page.waitFor('a[href="/auth/logout"]');
-
   const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
-
   expect(text).toEqual('Logout');
 });
 

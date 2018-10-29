@@ -1,4 +1,4 @@
-requiere('../models/User.js');
+require('../models/User.js');
 
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
