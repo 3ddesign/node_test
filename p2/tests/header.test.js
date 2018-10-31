@@ -1,19 +1,17 @@
-const puppeteer = require('puppeteer');
 const sessionFactory = require('./factories/sessionFactory');
 const userFactory = require('./factories/userFactory');
-let browser, page;
+const Page = require('./helpers/page');
+
+let page;
 
 beforeEach(async () => {
-  browser = await puppeteer.launch({
-    headless: false
-  });
   jest.setTimeout(30000);
-  page = await browser.newPage();
+  page = await Page.build();
   await page.goto('localhost:3000');
 });
 
 afterEach(async () => {
-  await browser.close();
+  await page.close();
 });
 
 test('the header has the correct text', async () => {

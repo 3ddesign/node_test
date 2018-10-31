@@ -7,6 +7,18 @@ class CustomPage {
         });
 
         const page = await browser.newPage();
-        const customPage = new CustomPage();
+        const customPage = new CustomPage(page);
+
+        return new Proxy(customPage, {
+            get: function(target, property) {
+                return customPage[property] || browser[property] || page[property];
+            }
+        });
+    }
+
+    constructor(page) {
+        this.page = page;
     }
 }
+
+module.exports = CustomPage;
